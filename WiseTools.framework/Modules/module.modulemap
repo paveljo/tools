@@ -1,0 +1,11 @@
+framework module WiseTools {
+  umbrella header "WiseTools.h"
+
+  export *
+  module * { export * }
+}
+
+module WiseTools.Swift {
+    header "WiseTools-Swift.h"
+    requires objc
+}
