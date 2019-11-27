@@ -342,6 +342,17 @@ SWIFT_CLASS("_TtC9WiseTools11NetworkTool")
 @end
 
 
+SWIFT_CLASS("_TtC9WiseTools18PermissionsManager") SWIFT_AVAILABILITY(ios,introduced=10.0)
+@interface PermissionsManager : ServiceObject
+/// ///////////////////////////////////////////////////////////////////////////////////////////////
+/// Methods
+/// ///////////////////////////////////////////////////////////////////////////////////////////////
+/// initializer.
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_DEPRECATED_MSG("-init is unavailable");
+@end
+
+
 SWIFT_CLASS("_TtC9WiseTools16ReachabilityTool")
 @interface ReachabilityTool : ServiceObject
 /// ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -728,6 +739,17 @@ SWIFT_CLASS("_TtC9WiseTools11NetworkTool")
 - (void)URLSession:(NSURLSession * _Nonnull)session didBecomeInvalidWithError:(NSError * _Nullable)error;
 - (void)URLSession:(NSURLSession * _Nonnull)session didReceiveChallenge:(NSURLAuthenticationChallenge * _Nonnull)challenge completionHandler:(void (^ _Nonnull)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler;
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession * _Nonnull)session;
+@end
+
+
+SWIFT_CLASS("_TtC9WiseTools18PermissionsManager") SWIFT_AVAILABILITY(ios,introduced=10.0)
+@interface PermissionsManager : ServiceObject
+/// ///////////////////////////////////////////////////////////////////////////////////////////////
+/// Methods
+/// ///////////////////////////////////////////////////////////////////////////////////////////////
+/// initializer.
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_DEPRECATED_MSG("-init is unavailable");
 @end
 
 
