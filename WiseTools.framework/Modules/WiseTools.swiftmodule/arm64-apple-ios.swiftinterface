@@ -1,0 +1,841 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.3.2 effective-4.2 (swiftlang-1200.0.45 clang-1200.0.32.28)
+// swift-module-flags: -target arm64-apple-ios8.0 -enable-objc-interop -enable-library-evolution -swift-version 4.2 -enforce-exclusivity=checked -O -module-name WiseTools
+import AVFoundation
+import AudioToolbox
+import CoreBluetooth
+import CoreLocation
+import CoreMotion
+import LocalAuthentication
+import Photos
+import Security
+import Swift
+import SystemConfiguration
+import UIKit
+import UserNotifications
+@_exported import WiseTools
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class LocationTool : WiseTools.ServiceObject, CoreLocation.CLLocationManagerDelegate {
+  final public var authStatusChanged: WiseTools.Event<WiseTools.LocationTool>!
+  final public var locationChanged: WiseTools.Event<WiseTools.LocationTool>!
+  public static func getInstance() -> WiseTools.LocationTool
+  final public func isLocationServiceAvailable() -> Swift.Bool
+  final public func isAuthorizationStatusGranted() -> Swift.Bool
+  final public func getLastLocation() -> CoreLocation.CLLocation?
+  final public func enableBackgroundMode()
+  final public func startLocationUpdating()
+  final public func stopLocationUpdating()
+  @objc final public func locationManager(_ manager: CoreLocation.CLLocationManager, didFailWithError error: Swift.Error)
+  @objc final public func locationManagerDidPauseLocationUpdates(_ manager: CoreLocation.CLLocationManager)
+  @objc final public func locationManagerDidResumeLocationUpdates(_ manager: CoreLocation.CLLocationManager)
+  @objc final public func locationManager(_ manager: CoreLocation.CLLocationManager, didChangeAuthorization status: CoreLocation.CLAuthorizationStatus)
+  @objc final public func locationManager(_ manager: CoreLocation.CLLocationManager, didUpdateLocations locations: [CoreLocation.CLLocation])
+  override final public func release(_ creator_: Swift.AnyObject)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers final public class Platform {
+  public static func isSimulator() -> Swift.Bool
+  public static func isJailbroken() -> Swift.Bool
+  public static func systemName() -> Swift.String
+  public static func systemVersion() -> Swift.String
+  public static func name() -> Swift.String
+  public static func language() -> Swift.String?
+  public static func preferredLanguage() -> Swift.String?
+  public static func play(_ id_: AudioToolbox.SystemSoundID)
+  public static func play(_ resource_: Swift.String, of type_: Swift.String)
+  public static func vibrate()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class DatabaseTool : WiseTools.ServiceObject {
+  public enum SQLiteStatusCode : Swift.Int32 {
+    case OK
+    case ERROR
+    case INTERNAL_LOGIC_ERROR
+    case ACCESS_PERMISSION_DENIED
+    case ABORT
+    case BUSY
+    case LOCKED
+    case NO_MEMORY
+    case READ_ONLY
+    case INTERRUPT
+    case IO_ERROR
+    case CORRUPT
+    case NOT_FOUND
+    case FULL
+    case CANT_OPEN
+    case PROTOCOL
+    case EMPTY
+    case SCHEMA
+    case TOO_BIG
+    case CONSTRAINT
+    case MISMATCH
+    case MISUSE
+    case NO_LFS
+    case AUTH_DENIED
+    case FORMAT
+    case RANGE
+    case NOT_A_DATABASE
+    case ROW
+    case DONE
+    public typealias RawValue = Swift.Int32
+    public init?(rawValue: Swift.Int32)
+    public var rawValue: Swift.Int32 {
+      get
+    }
+  }
+  @_hasMissingDesignatedInitializers final public class Cursor {
+    final public func getIndex(of column_: Swift.String) -> Swift.Int32
+    final public func getInteger(at column_: Swift.Int32) -> Swift.Int32
+    final public func getInteger(at column_: Swift.Int32) -> Swift.Int64
+    final public func getDouble(at column_: Swift.Int32) -> Swift.Double
+    final public func getString(at column_: Swift.Int32) -> Swift.String?
+    final public func getData(at column_: Swift.Int32) -> Foundation.Data
+    final public func next() -> Swift.Bool
+    final public func close() -> Swift.Bool
+    @objc deinit
+  }
+  @_hasMissingDesignatedInitializers final public class DatabaseHelper {
+    @_hasMissingDesignatedInitializers final public class SQLiteStatement {
+      final public func getInteger(at column_: Swift.Int) -> Swift.Int64
+      final public func getDouble(at column_: Swift.Int) -> Swift.Double
+      final public func getString(at column_: Swift.Int) -> Swift.String?
+      final public func getData(at column_: Swift.Int) -> Foundation.Data?
+      final public func bindNil(at column_: Swift.Int) -> WiseTools.DatabaseTool.SQLiteStatusCode?
+      final public func bindInteger(_ value_: Swift.Int64, at column_: Swift.Int) -> WiseTools.DatabaseTool.SQLiteStatusCode?
+      final public func bindDouble(_ value_: Swift.Double, at column_: Swift.Int) -> WiseTools.DatabaseTool.SQLiteStatusCode?
+      final public func bindString(_ value_: Swift.String, at column_: Swift.Int) -> WiseTools.DatabaseTool.SQLiteStatusCode?
+      final public func bindData(_ value_: Foundation.Data, at column_: Swift.Int) -> WiseTools.DatabaseTool.SQLiteStatusCode?
+      final public func step() -> WiseTools.DatabaseTool.SQLiteStatusCode?
+      final public func finalize() -> WiseTools.DatabaseTool.SQLiteStatusCode?
+      @objc deinit
+    }
+    final public func getAffectedRows() -> Swift.Int
+    final public func open() -> Swift.Bool
+    final public func close() -> Swift.Bool
+    final public func beginTransaction() -> Swift.Bool
+    final public func commitTransaction() -> Swift.Bool
+    final public func rollbackTransaction() -> Swift.Bool
+    final public func prepare(_ query_: Swift.String) -> WiseTools.DatabaseTool.DatabaseHelper.SQLiteStatement?
+    final public func select(_ query_: Swift.String) -> WiseTools.DatabaseTool.Cursor?
+    final public func execute(_ query_: Swift.String) -> Swift.Bool
+    @objc deinit
+  }
+  public static func getInstance() -> WiseTools.DatabaseTool
+  final public func createDatabase(at path_: Swift.String, with commands_: [Swift.String]) -> WiseTools.DatabaseTool.DatabaseHelper?
+  override final public func release(_ creator_: Swift.AnyObject)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers open class Entity : ObjectiveC.NSObject {
+  public static let TYPE: Swift.String
+  public static let MAP_KEY: Swift.String
+  public static let MAP_VALUE: Swift.String
+  @objc override dynamic public init()
+  required public init(_ json_: WiseTools.JSONObject?) throws
+  required public init(_ iter_: inout Foundation.Data.Iterator) throws
+  final public func toJSON() -> WiseTools.JSONObject?
+  final public func toBytes() -> Foundation.Data?
+  final public func toString() -> Swift.String?
+  @nonobjc final public func parseObject(_ json_: WiseTools.JSONObject?, _ key_: Swift.String, _ default_: WiseTools.JSONObject) -> WiseTools.JSONObject
+  @nonobjc final public func parseObject(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> WiseTools.JSONObject
+  @nonobjc final public func parseObject(_ json_: WiseTools.JSONObject?, _ key_: Swift.String, _ default_: Swift.String) -> Swift.String
+  @nonobjc final public func parseObject(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> Swift.String
+  @nonobjc final public func parseObject(_ json_: WiseTools.JSONObject?, _ key_: Swift.String, _ default_: Swift.Double) -> Swift.Double
+  @nonobjc final public func parseObject(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> Swift.Double
+  @nonobjc final public func parseObject(_ json_: WiseTools.JSONObject?, _ key_: Swift.String, _ default_: Swift.Bool) -> Swift.Bool
+  @nonobjc final public func parseObject(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> Swift.Bool
+  @nonobjc final public func parseObject<T>(_ json_: WiseTools.JSONObject?, _ key_: Swift.String, _ default_: T) -> T where T : Swift.BinaryInteger
+  @nonobjc final public func parseObject<T>(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> T where T : Swift.BinaryInteger
+  @nonobjc final public func parseObject<T>(_ json_: WiseTools.JSONObject?, _ key_: Swift.String, _ default_: [T]) -> [T] where T : Swift.BinaryInteger
+  @nonobjc final public func parseObject<T>(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> [T] where T : Swift.BinaryInteger
+  @nonobjc final public func parseObject(_ json_: WiseTools.JSONObject?, _ key_: Swift.String, _ default_: Foundation.Data) -> Foundation.Data
+  @nonobjc final public func parseObject(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> Foundation.Data
+  @nonobjc final public func parseObject(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> [Foundation.Data]
+  @nonobjc final public func parseObject<R>(_ json_: WiseTools.JSONObject?, _ key_: Swift.String, _ default_: R) -> R where R : Swift.RawRepresentable, R.RawValue == Swift.UInt8
+  @nonobjc final public func parseObject<R>(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> R where R : Swift.RawRepresentable, R.RawValue == Swift.UInt8
+  @nonobjc final public func parseObject<E>(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> E where E : WiseTools.Entity
+  @nonobjc final public func parseObject<E>(_ json_: WiseTools.JSONArray?, _ index_: Swift.Int) throws -> E where E : WiseTools.Entity
+  @nonobjc final public func parseObject<E>(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> [E] where E : WiseTools.Entity
+  @nonobjc final public func parseObject<K, V>(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> [K : V] where K : Swift.BinaryInteger, V : WiseTools.Entity
+  @nonobjc final public func parseObject<K>(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> [K : Foundation.Data] where K : Swift.BinaryInteger
+  @nonobjc final public func parseObject(_ json_: WiseTools.JSONObject?, _ key_: Swift.String) throws -> [Swift.String : Swift.String]
+  @nonobjc final public func parseObject<T>(_ iter_: inout Foundation.Data.Iterator, _ key_: Swift.String) throws -> T where T : Swift.BinaryInteger
+  @nonobjc final public func parseObject(_ iter_: inout Foundation.Data.Iterator, _ key_: Swift.String) throws -> Swift.Double
+  @nonobjc final public func parseObject(_ iter_: inout Foundation.Data.Iterator, _ size_: Swift.Int, _ key_: Swift.String) throws -> Foundation.Data
+  @nonobjc final public func parseObject<R>(_ iter_: inout Foundation.Data.Iterator, _ key_: Swift.String) throws -> R where R : Swift.RawRepresentable, R.RawValue == Swift.UInt8
+  @nonobjc final public func parseObject<E>(_ iter_: inout Foundation.Data.Iterator, _ key_: Swift.String) throws -> E where E : WiseTools.Entity
+  @nonobjc final public func parseObject<E>(_ iter_: inout Foundation.Data.Iterator, _ key_: Swift.String) throws -> [E] where E : WiseTools.Entity
+  @nonobjc final public func parseObject(_ iter_: inout Foundation.Data.Iterator, _ key_: Swift.String) throws -> [Swift.String : Swift.String]
+  @nonobjc final public func parseObject<K, V>(_ iter_: inout Foundation.Data.Iterator, _ key_: Swift.String) throws -> [K : V] where K : Swift.BinaryInteger, V : WiseTools.Entity
+  open func buildJSON() -> WiseTools.JSONObject
+  open func buildBinary() -> Foundation.Data
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class Singleton : WiseTools.ServiceObject {
+  public static func getInstance() -> WiseTools.Singleton
+  override final public func release(_ creator_: Swift.AnyObject)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers final public class KeyDerivation {
+  public enum Algorithm {
+    case SHA1, SHA224, SHA256, SHA384, SHA512
+    public static func == (a: WiseTools.KeyDerivation.Algorithm, b: WiseTools.KeyDerivation.Algorithm) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+  }
+  public static func PBKDF2(password: Foundation.Data, salt: Foundation.Data, prf: WiseTools.KeyDerivation.Algorithm, rounds: Swift.Int, derivedKeyLen: Swift.Int) -> Foundation.Data
+  @objc deinit
+}
+@objc open class Serializable : ObjectiveC.NSObject, Foundation.NSCoding {
+  public var tag: Swift.String!
+  public init(tag_: Swift.String)
+  @discardableResult
+  public func readState() -> Swift.Bool
+  @discardableResult
+  public func saveState() -> Swift.Bool
+  @discardableResult
+  public func removeState() -> Swift.Bool
+  @objc required public init(coder decoder: Foundation.NSCoder)
+  @objc public func encode(with coder: Foundation.NSCoder)
+  @objc deinit
+  @objc override dynamic public init()
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class ReachabilityTool : WiseTools.ServiceObject {
+  final public var stateChangeEvent: WiseTools.Event<WiseTools.ReachabilityTool>!
+  public static func getInstance() -> WiseTools.ReachabilityTool
+  @discardableResult
+  final public func startMonitoring() -> Swift.Bool
+  @discardableResult
+  final public func stopMonitoring() -> Swift.Bool
+  final public func isConnected() -> Swift.Bool
+  override final public func release(_ creator_: Swift.AnyObject)
+  @objc deinit
+}
+final public class Result<T> : Swift.CustomStringConvertible {
+  final public let type: T
+  final public let actor: Swift.AnyObject
+  final public var message: Swift.String?
+  final public var cause: Swift.AnyObject?
+  final public var description: Swift.String {
+    get
+  }
+  convenience public init(actor_: Swift.AnyObject, type_: T)
+  convenience public init(actor_: Swift.AnyObject, type_: T, message_: Swift.String?)
+  convenience public init(actor_: Swift.AnyObject, type_: T, cause_: Swift.AnyObject?)
+  public init(actor_: Swift.AnyObject, type_: T, message_: Swift.String?, cause_: Swift.AnyObject?)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers final public class Exceptions {
+  public static let RELEASE_RELEASED_OBJECT: Swift.String
+  public static let ABSTRACT_METHOD_CALL: Swift.String
+  @objc deinit
+}
+final public class HMAC {
+  public enum Algorithm {
+    case MD5, SHA1, SHA224, SHA256, SHA384, SHA512
+    public func digestLength() -> Swift.Int
+    public static func == (a: WiseTools.HMAC.Algorithm, b: WiseTools.HMAC.Algorithm) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+  }
+  public init(algorithm: WiseTools.HMAC.Algorithm, keyBuffer: Swift.UnsafeRawPointer, keyByteCount: Swift.Int)
+  public init(algorithm: WiseTools.HMAC.Algorithm, key: Foundation.Data)
+  public init(algorithm: WiseTools.HMAC.Algorithm, key: [Swift.UInt8])
+  @objc deinit
+  final public func update(buffer: Foundation.Data) -> Self?
+  final public func digest() -> Foundation.Data
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class NetworkTool : WiseTools.ServiceObject, Foundation.URLSessionDelegate {
+  public enum ResultType : Swift.UInt8 {
+    case UNKNOWN
+    case SUCCESS
+    case FAILURE
+    case BUSY
+    case CANCELED
+    case NOT_CONNECTED
+    case TIMEOUT
+    case UNABLE_TO_CONNECT
+    case UNABLE_TO_SEND
+    case UNABLE_TO_READ
+    case SSL_ERROR
+    public typealias RawValue = Swift.UInt8
+    public init?(rawValue: Swift.UInt8)
+    public var rawValue: Swift.UInt8 {
+      get
+    }
+  }
+  public enum HttpStatusCode : Swift.Int {
+    case UNKNOWN
+    case OK
+    case CREATED
+    case ACCEPTED
+    case NO_CONTENT
+    case NOT_MODIFIED
+    case BAD_REQUEST
+    case UNAUTHORIZED
+    case FORBIDDEN
+    case NOT_FOUND
+    case METHOD_NOT_ALLOWED
+    case CONFLICT
+    case UNPROCESSABLE_ENTITY
+    case SERVER_ERROR
+    case BAD_GATEWAY
+    case SERVER_UNAVAILABLE
+    case GATEWAY_TIMEOUT
+    public typealias RawValue = Swift.Int
+    public init?(rawValue: Swift.Int)
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  final public var responseReceived: WiseTools.Event<WiseTools.NetworkTool>!
+  public static func getInstance() -> WiseTools.NetworkTool
+  final public func getLastResult() -> WiseTools.Result<WiseTools.NetworkTool.ResultType>
+  final public func getLastResponse() -> Foundation.Data?
+  final public func getLastUrl() -> Swift.String
+  final public func getLastTag() -> Swift.String
+  final public func getLastHeaders() -> [Swift.AnyHashable : Any]?
+  final public func getLastHttpStatusCode() -> WiseTools.NetworkTool.HttpStatusCode
+  final public func getLastErrorCode() -> Swift.Int
+  final public func getLastElapsedTime() -> Swift.UInt64
+  final public func setAuthCredentials(certificate_: Swift.String, password_: Swift.String)
+  final public func send(data_: Swift.String, headers_: [Swift.String : Swift.String], url_: Swift.String, tag_: Swift.String) -> WiseTools.Result<WiseTools.NetworkTool.ResultType>
+  final public func cancedRequest(_ tag_: Swift.String)
+  final public func cancelAllRequests()
+  @objc final public func urlSession(_ session: Foundation.URLSession, didBecomeInvalidWithError error: Swift.Error?)
+  @objc final public func urlSession(_ session: Foundation.URLSession, didReceive challenge: Foundation.URLAuthenticationChallenge, completionHandler: @escaping (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void)
+  @objc final public func urlSessionDidFinishEvents(forBackgroundURLSession session: Foundation.URLSession)
+  override final public func release(_ creator_: Swift.AnyObject)
+  @objc deinit
+}
+public enum ParseError : Swift.Error, Swift.CustomDebugStringConvertible {
+  case FoundNil(Swift.String)
+  case OutOfBounds(Swift.String)
+  case InvalidParam(Swift.String)
+  case InvalidLength(Swift.String)
+  case AbstractMethodError
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers final public class BinaryManager {
+  public static let SIZE_ARRAY_LENGTH: Swift.Int
+  public static let SIZE_UINT8: Swift.Int
+  public static let SIZE_INT8: Swift.Int
+  public static let SIZE_UINT16: Swift.Int
+  public static let SIZE_INT16: Swift.Int
+  public static let SIZE_UINT24: Swift.Int
+  public static let SIZE_INT24: Swift.Int
+  public static let SIZE_UINT32: Swift.Int
+  public static let SIZE_INT32: Swift.Int
+  public static let SIZE_UINT64: Swift.Int
+  public static let SIZE_INT64: Swift.Int
+  public static func readInteger<T>(_ source_: Foundation.Data) throws -> T where T : Swift.BinaryInteger
+  public static func readInteger<T>(_ source_: Foundation.Data, _ offset_: Swift.Int) throws -> T where T : Swift.BinaryInteger
+  public static func readInteger<T>(_ iter_: inout Foundation.Data.Iterator) throws -> T where T : Swift.BinaryInteger
+  public static func readInteger<T>(_ iter_: inout Foundation.Data.Iterator, with size_: Swift.Int) throws -> T where T : Swift.BinaryInteger
+  public static func readInteger(_ source_: Swift.UInt8, _ range_: Swift.ClosedRange<Swift.UInt8>) throws -> Swift.UInt8
+  public static func readDouble(_ iter_: inout Foundation.Data.Iterator) throws -> Swift.Double
+  public static func readBytes(_ iter_: inout Foundation.Data.Iterator, with size_: Swift.Int) throws -> Foundation.Data
+  public static func readBytes(_ iter_: inout Foundation.Data.Iterator, length_: Swift.Int) throws -> Foundation.Data
+  public static func readBytes(_ bytes_: Foundation.Data) throws -> Foundation.Data
+  public static func writeInteger<T>(_ value_: T, to buffer_: inout Foundation.Data) where T : Swift.BinaryInteger
+  public static func writeInteger<T>(_ value_: T, with size_: Swift.Int, to buffer_: inout Foundation.Data) where T : Swift.BinaryInteger
+  public static func writeDouble(_ value_: Swift.Double, to buffer_: inout Foundation.Data)
+  public static func writeBytes(_ source_: Foundation.Data, to buffer_: inout Foundation.Data)
+  public static func writeEntity(_ entity_: WiseTools.Entity, to buffer_: inout Foundation.Data)
+  public static func writeCollection(_ collection_: [WiseTools.Entity], to buffer_: inout Foundation.Data)
+  public static func writeList<T>(_ list_: [T], to buffer_: inout Foundation.Data) where T : Swift.BinaryInteger
+  public static func hexFrom(data_: Foundation.Data) -> Swift.String
+  public static func dataFrom(hex_: Swift.String) -> Foundation.Data?
+  public static func arrayFrom(hex_: Swift.String) -> [Swift.UInt8]?
+  public static func random(size_: Swift.Int) -> Foundation.Data?
+  @objc deinit
+}
+final public class Event<T> where T : AnyObject {
+  final public class Observer : Swift.Hashable {
+    final public func hash(into hasher: inout Swift.Hasher)
+    public init(_ owner_: Swift.AnyObject, _ action_: @escaping (T) -> ())
+    @objc deinit
+    final public var hashValue: Swift.Int {
+      get
+    }
+  }
+  final public var count: Swift.Int {
+    get
+  }
+  public init(_ sender_: T)
+  final public func attach(_ observer_: WiseTools.Event<T>.Observer)
+  final public func attachOnce(_ observer_: WiseTools.Event<T>.Observer)
+  final public func detach(_ observer_: WiseTools.Event<T>.Observer)
+  final public func detach(_ owner_: Swift.AnyObject)
+  final public func detachAll()
+  final public func invokeAll()
+  final public func invokeOnMainThread()
+  @objc deinit
+}
+public func == <T>(lhs: WiseTools.Event<T>.Observer, rhs: WiseTools.Event<T>.Observer) -> Swift.Bool where T : AnyObject
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class KeyChainHelper : WiseTools.ServiceObject {
+  public enum AccessOption : Swift.RawRepresentable {
+    case WHEN_ULOCKED
+    case WHEN_ULOCKED_THIS_DEVICE_ONLY
+    case AFTER_FIRST_UNLOCK
+    case AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY
+    case ALWAYS
+    case WHEN_PASSCODE_SET_THIS_DEVICE_ONLY
+    case ALWAYS_THIS_DEVICE_ONLY
+    public init?(rawValue: Swift.String)
+    public var rawValue: Swift.String {
+      get
+    }
+    public typealias RawValue = Swift.String
+  }
+  final public var accessGroup: Swift.String?
+  final public var synchronizable: Swift.Bool
+  public static func getInstance() -> WiseTools.KeyChainHelper
+  final public func getLastResult() -> Darwin.OSStatus
+  @discardableResult
+  final public func set(_ value: Swift.String, forKey key: Swift.String, withAccess access: WiseTools.KeyChainHelper.AccessOption?) -> Swift.Bool
+  @discardableResult
+  final public func set(_ value: Swift.Bool, forKey key: Swift.String, withAccess access: WiseTools.KeyChainHelper.AccessOption?) -> Swift.Bool
+  @discardableResult
+  final public func set<T>(_ value: T, forKey key: Swift.String, withAccess access: WiseTools.KeyChainHelper.AccessOption?) -> Swift.Bool where T : Swift.BinaryInteger
+  @discardableResult
+  final public func set(_ value: Foundation.Data, forKey key: Swift.String, withAccess access: WiseTools.KeyChainHelper.AccessOption?) -> Swift.Bool
+  final public func getString(_ key: Swift.String) -> Swift.String?
+  final public func getBoolean(_ key: Swift.String) -> Swift.Bool?
+  final public func getInteger<T>(_ key: Swift.String) -> T? where T : Swift.BinaryInteger
+  final public func getData(_ key: Swift.String) -> Foundation.Data?
+  @discardableResult
+  final public func delete(_ key: Swift.String) -> Swift.Bool
+  @discardableResult
+  final public func clear() -> Swift.Bool
+  override final public func release(_ creator_: Swift.AnyObject)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers final public class Auxiliary {
+  public static let BUNDLE_NAME: Swift.String
+  public static let BUNDLE_VERSION: Swift.String
+  public static let BUNDLE_SHORT_VERSION: Swift.String
+  public enum Severity : Swift.UInt8 {
+    case DEBUG
+    case VERBOSE
+    case INFO
+    case WARN
+    case ERROR
+    public typealias RawValue = Swift.UInt8
+    public init?(rawValue: Swift.UInt8)
+    public var rawValue: Swift.UInt8 {
+      get
+    }
+  }
+  public static func version() -> Swift.String?
+  public static func version(from bundle_: Foundation.Bundle) -> Swift.String?
+  public static func version(from bundle_: Swift.String) -> Swift.String?
+  public static func appName() -> Swift.String?
+  public static func appVersion() -> Swift.String?
+  public static func appBuild() -> Swift.String?
+  public static func appBundleIdentifier() -> Swift.String?
+  public static func bundleIdentifier(from bundle_: Foundation.Bundle) -> Swift.String?
+  public static func vendorIdentifier() -> Swift.String?
+  public static func setStoreLevel(_ l_: Swift.UInt8, file_: Swift.String)
+  public static func getLog() -> Swift.String?
+  public static func log(_ msg_: Swift.String, tag_: Swift.String, severity_: WiseTools.Auxiliary.Severity = .DEBUG)
+  public static func timestampToTime(timestamp_: Swift.UInt64) -> Swift.String
+  @objc deinit
+}
+public enum CryptorError : Swift.Error, Swift.CustomDebugStringConvertible {
+  case CreateCryptor(Swift.Int32)
+  case UpdateData(Swift.Int32)
+  case FinalizeData(Swift.Int32)
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers final public class Cryptor {
+  public enum Algorithm : Swift.UInt32 {
+    case AES
+    case DES
+    public typealias RawValue = Swift.UInt32
+    public init?(rawValue: Swift.UInt32)
+    public var rawValue: Swift.UInt32 {
+      get
+    }
+  }
+  public enum Mode : Swift.UInt32 {
+    case ECB
+    case CBC
+    case CFB
+    case CTR
+    case OFB
+    case XTS
+    case RC4
+    case CFB8
+    public typealias RawValue = Swift.UInt32
+    public init?(rawValue: Swift.UInt32)
+    public var rawValue: Swift.UInt32 {
+      get
+    }
+  }
+  public enum ModeOptions : Swift.UInt32 {
+    case DEFAULT
+    case CTR_LE
+    case CTR_BE
+    public typealias RawValue = Swift.UInt32
+    public init?(rawValue: Swift.UInt32)
+    public var rawValue: Swift.UInt32 {
+      get
+    }
+  }
+  public enum Padding : Swift.UInt32 {
+    case NO_PADDING
+    case PKCS7
+    public typealias RawValue = Swift.UInt32
+    public init?(rawValue: Swift.UInt32)
+    public var rawValue: Swift.UInt32 {
+      get
+    }
+  }
+  public enum Options : Swift.UInt32 {
+    case ENCRYPT
+    case DECRYPT
+    public typealias RawValue = Swift.UInt32
+    public init?(rawValue: Swift.UInt32)
+    public var rawValue: Swift.UInt32 {
+      get
+    }
+  }
+  public static func setConfiguration(_ conf_: (algorithm: WiseTools.Cryptor.Algorithm, mode: WiseTools.Cryptor.Mode, options: WiseTools.Cryptor.ModeOptions, padding: WiseTools.Cryptor.Padding))
+  public static func decrypt(data_: Foundation.Data, with symetricKey_: (key: Foundation.Data, iv: Foundation.Data?)) throws -> Foundation.Data
+  public static func encrypt(data_: Foundation.Data, with symetricKey_: (key: Foundation.Data, iv: Foundation.Data?)) throws -> Foundation.Data
+  public static func encrypt(data_: Foundation.Data, mode_: WiseTools.Cryptor.Mode, options_: WiseTools.Cryptor.ModeOptions, algorithm_: WiseTools.Cryptor.Algorithm, padding_: WiseTools.Cryptor.Padding, iv_: Foundation.Data?, key_: Foundation.Data) throws -> Foundation.Data
+  public static func decrypt(data_: Foundation.Data, mode_: WiseTools.Cryptor.Mode, options_: WiseTools.Cryptor.ModeOptions, algorithm_: WiseTools.Cryptor.Algorithm, padding_: WiseTools.Cryptor.Padding, iv_: Foundation.Data?, key_: Foundation.Data) throws -> Foundation.Data
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class IBeaconTool : WiseTools.ServiceObject, CoreLocation.CLLocationManagerDelegate {
+  final public var authStatusChanged: WiseTools.Event<WiseTools.IBeaconTool>!
+  final public var didEnterRegion: WiseTools.Event<WiseTools.IBeaconTool>!
+  final public var didExitRegion: WiseTools.Event<WiseTools.IBeaconTool>!
+  public static func getInstance() -> WiseTools.IBeaconTool
+  final public func getCrossedRegion() -> CoreLocation.CLRegion?
+  final public func isLocationServiceAvailable() -> Swift.Bool
+  final public func isMonitoringAvailable() -> Swift.Bool
+  final public func isAuthorizationStatusGranted() -> Swift.Bool
+  final public func setRegion(uuid_: Swift.String, name_: Swift.String) -> Swift.Bool
+  final public func startMonitoring()
+  final public func stopMonitoring()
+  @objc final public func locationManager(_ manager: CoreLocation.CLLocationManager, didFailWithError error: Swift.Error)
+  @objc final public func locationManagerDidPauseLocationUpdates(_ manager: CoreLocation.CLLocationManager)
+  @objc final public func locationManagerDidResumeLocationUpdates(_ manager: CoreLocation.CLLocationManager)
+  @objc final public func locationManager(_ manager: CoreLocation.CLLocationManager, didChangeAuthorization status: CoreLocation.CLAuthorizationStatus)
+  @objc final public func locationManager(_ manager: CoreLocation.CLLocationManager, didStartMonitoringFor region: CoreLocation.CLRegion)
+  @objc final public func locationManager(_ manager: CoreLocation.CLLocationManager, didDetermineState state: CoreLocation.CLRegionState, for region: CoreLocation.CLRegion)
+  @objc final public func locationManager(_ manager: CoreLocation.CLLocationManager, rangingBeaconsDidFailFor region: CoreLocation.CLBeaconRegion, withError error: Swift.Error)
+  @objc final public func locationManager(_ manager: CoreLocation.CLLocationManager, monitoringDidFailFor region: CoreLocation.CLRegion?, withError error: Swift.Error)
+  @objc final public func locationManager(_ manager: CoreLocation.CLLocationManager, didRangeBeacons beacons: [CoreLocation.CLBeacon], in region: CoreLocation.CLBeaconRegion)
+  @objc final public func locationManager(_ manager: CoreLocation.CLLocationManager, didEnterRegion region: CoreLocation.CLRegion)
+  @objc final public func locationManager(_ manager: CoreLocation.CLLocationManager, didExitRegion region: CoreLocation.CLRegion)
+  override final public func release(_ creator_: Swift.AnyObject)
+  @objc deinit
+}
+@objc final public class SensorsTool : WiseTools.ServiceObject {
+  public enum SensorType {
+    case ACCELEROMETER
+    case GYROSCOPE
+    case MAGNETOMETER
+    case ATTITUDE
+    case GRAVITY
+    public static func == (a: WiseTools.SensorsTool.SensorType, b: WiseTools.SensorsTool.SensorType) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+  }
+  public init(type_: WiseTools.SensorsTool.SensorType, delegate_: WiseTools.SensorsToolDelegate)
+  final public func isSensorAvailable(_ type_: WiseTools.SensorsTool.SensorType) -> Swift.Bool
+  final public func isSensorActive(_ type_: WiseTools.SensorsTool.SensorType) -> Swift.Bool
+  final public func getLastVector() -> [Swift.Double]
+  final public func setUpdateInterval(_ interval_: Swift.Int)
+  final public func startUpdates()
+  final public func stopUpdates()
+  override final public func release(_ creator_: Swift.AnyObject)
+  @objc deinit
+  @objc override dynamic public init()
+}
+public protocol SensorsToolDelegate : AnyObject {
+  func onSensorChanged(_ values_: [Swift.Double])
+}
+@_hasMissingDesignatedInitializers final public class SystemClock {
+  public static let SECOND: Swift.Int
+  public static let MINUTE: Swift.Int
+  public static let HOUR: Swift.Int
+  public static let DAY: Swift.Int
+  public static func currentTime() -> Foundation.TimeInterval
+  public static func currentTimeMillis() -> Swift.UInt64
+  public static func absoluteTimeMillis() -> Swift.UInt64
+  public static func elapsedTimeMillis() -> Swift.UInt64
+  public static func dispatchTimeMillis() -> Swift.UInt64
+  public static func currentDate() -> Swift.String
+  public static func currentDate(with format_: Swift.String) -> Swift.String
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 10.0, *)
+final public class PermissionsManager : WiseTools.ServiceObject {
+  public enum PermissionType {
+    case LOCATION_WHEN_IN_USE
+    case LOCATION_ALWAYS
+    case NOTIFICATIONS
+    case CAMERA
+    case PHOTOS
+    public static func == (a: WiseTools.PermissionsManager.PermissionType, b: WiseTools.PermissionsManager.PermissionType) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+  }
+  public enum PermissionStatus {
+    case NO_DESCRIPTION_IN_PLIST
+    case NOT_DETERMINED
+    case DENIED
+    case RESTRICTED
+    case AUTHORIZED
+    public static func == (a: WiseTools.PermissionsManager.PermissionStatus, b: WiseTools.PermissionsManager.PermissionStatus) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+  }
+  public static func getInstance() -> WiseTools.PermissionsManager
+  final public func getPermissionStatus(_ type: WiseTools.PermissionsManager.PermissionType) -> WiseTools.PermissionsManager.PermissionStatus
+  final public func requestPermission(_ type: WiseTools.PermissionsManager.PermissionType, handler: @escaping (WiseTools.PermissionsManager.PermissionStatus) -> Swift.Void)
+  override final public func release(_ creator_: Swift.AnyObject)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers open class ServiceObject : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  public func isReleased() -> Swift.Bool
+  open func release(_ creator_: Swift.AnyObject)
+  @objc deinit
+}
+public enum JSONError : Swift.Error, Swift.CustomDebugStringConvertible {
+  case InvalidJSON(Swift.String)
+  case EncodeSourceError(Swift.String)
+  case JSONParserError(Swift.String)
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+final public class JSONObject {
+  final public var map: [Swift.String : Any]
+  public static func decode(jwt_: Swift.String) throws -> WiseTools.JSONObject
+  public init()
+  public init(_ bytes_: Foundation.Data) throws
+  convenience public init(_ source_: Swift.String) throws
+  public init(map_: [Swift.String : Any])
+  final public func get(_ key_: Swift.String) -> Any?
+  final public func getJSONObject(_ key_: Swift.String) -> WiseTools.JSONObject?
+  final public func getJSONArray(_ key_: Swift.String) -> WiseTools.JSONArray?
+  final public func getString(_ key_: Swift.String) -> Swift.String?
+  final public func getDouble(_ key_: Swift.String) -> Swift.Double?
+  final public func getBoolean(_ key_: Swift.String) -> Swift.Bool?
+  final public func getInteger<T>(_ key_: Swift.String) -> T? where T : Swift.BinaryInteger
+  final public func has(_ key_: Swift.String) -> Swift.Bool
+  final public func put(_ key_: Swift.String, value_: Swift.String?)
+  final public func put(_ key_: Swift.String, value_: Swift.Double?)
+  final public func put(_ key_: Swift.String, value_: Swift.Bool?)
+  final public func put<T>(_ key_: Swift.String, value_: T?) where T : Swift.BinaryInteger
+  final public func put(_ key_: Swift.String, value_: Swift.AnyObject?)
+  final public func put(_ key_: Swift.String, value_: [Any]?)
+  final public func put(_ key_: Swift.String, value_: WiseTools.JSONArray?)
+  final public func put(_ key_: Swift.String, value_: WiseTools.JSONObject?)
+  final public func length() -> Swift.Int
+  final public func toString() throws -> Swift.String
+  @objc deinit
+}
+final public class JSONArray : Swift.Sequence, Swift.IteratorProtocol {
+  final public var list: [Any]
+  public init()
+  public init(_ bytes_: Foundation.Data) throws
+  convenience public init(_ source_: Swift.String) throws
+  public init(array_: [Any])
+  final public func raw() -> [Any]
+  final public func get(_ index_: Swift.Int) -> Any?
+  final public func getBoolean(_ index_: Swift.Int) -> Swift.Bool?
+  final public func getString(_ index_: Swift.Int) -> Swift.String?
+  final public func getInteger<T>(_ index_: Swift.Int) -> T? where T : Swift.BinaryInteger
+  final public func getJSONObject(_ index_: Swift.Int) -> WiseTools.JSONObject?
+  final public func getJSONArray(_ index_: Swift.Int) -> WiseTools.JSONArray?
+  final public func put(_ value_: Swift.String?)
+  final public func put(_ value_: Swift.Double?)
+  final public func put(_ value_: Swift.Bool?)
+  final public func put<T>(_ value_: T?) where T : Swift.BinaryInteger
+  final public func put(_ value_: Any?)
+  final public func put(_ value_: WiseTools.JSONObject?)
+  final public func length() -> Swift.Int
+  final public func toString() throws -> Swift.String
+  final public func next() -> Any?
+  @objc deinit
+  public typealias Element = Any
+  public typealias Iterator = WiseTools.JSONArray
+}
+@_hasMissingDesignatedInitializers final public class Checksum {
+  public static func CRC16(of data_: Foundation.Data?) -> Swift.UInt16
+  public static func CRC32(of data_: Foundation.Data?) -> Swift.UInt32
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers final public class StorageTool {
+  public static let PATH_HOME: Swift.String
+  public static func getDirectoryContent(at path_: Swift.String) -> [Swift.String]?
+  public static func isFileExists(at path_: Swift.String) -> Swift.Bool
+  public static func createDirectory(at path_: Swift.String) -> Swift.Bool
+  public static func createFile(at path_: Swift.String, with content_: Foundation.Data?) -> Swift.Bool
+  public static func readFile(at path_: Swift.String) -> Foundation.Data?
+  @nonobjc public static func readFile(at path_: Swift.String) -> Swift.String?
+  public static func appendFile(at path_: Swift.String, with content_: Foundation.Data) -> Swift.Bool
+  public static func removeFile(at path_: Swift.String) -> Swift.Bool
+  public static func removeAll(from path_: Swift.String) -> Swift.Bool
+  public static func moveFile(at path_: Swift.String, to newPath_: Swift.String) -> Swift.Bool
+  public static func excludeFileFromBackup(at path_: Swift.String) -> Swift.Bool
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers final public class ReliableClock {
+  public static func realTimeMillis() -> Swift.UInt64
+  public static func getRealDate() -> Foundation.Date
+  public static func getRealTime(_ elapsed_: Swift.UInt64) -> Swift.UInt64
+  public static func setRealTime(_ time_: Swift.UInt64)
+  public static func recalculate()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class AuthenticationTool : WiseTools.ServiceObject {
+  public enum ErrorCode : Swift.Int {
+    case UNKNOWN
+    case AUTHENTICATION_FAILED
+    case USER_CANCEL
+    case USER_FALLBACK
+    case SYSTEM_CANCEL
+    case PASSCODE_NOT_SET
+    case BIOMETRY_NOT_AVAILABLE
+    case BIOMETRY_NOT_ENROLLED
+    case BIOMETRY_LOCKOUT
+    case APP_CANCEL
+    case INVALID_CONTEXT
+    case NOT_INTERACTIVE
+    public typealias RawValue = Swift.Int
+    public init?(rawValue: Swift.Int)
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  final public var authenticationFinished: WiseTools.Event<WiseTools.AuthenticationTool>!
+  public static func getInstance() -> WiseTools.AuthenticationTool
+  final public func isAuthenticated() -> Swift.Bool
+  final public func isAuthenticationAvailable() -> Swift.Bool
+  @available(iOS 11.0, *)
+  final public func getBiometricType() -> LocalAuthentication.LABiometryType
+  final public func getLastError() -> WiseTools.AuthenticationTool.ErrorCode
+  final public func setFallbackTitle(_ title_: Swift.String)
+  final public func startAuthentication(_ reason_: Swift.String)
+  override final public func release(_ creator_: Swift.AnyObject)
+  @objc deinit
+}
+final public class Digest {
+  public enum Algorithm {
+    case MD2, MD4, MD5, SHA1, SHA224, SHA256, SHA384, SHA512
+    public static func == (a: WiseTools.Digest.Algorithm, b: WiseTools.Digest.Algorithm) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+  }
+  public init(algorithm: WiseTools.Digest.Algorithm)
+  final public func update(buffer: Foundation.Data) -> Self?
+  final public func digest() -> Foundation.Data
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers final public class ThreadsManager {
+  public static func isMainThread() -> Swift.Bool
+  public static func getCurrentThread() -> Foundation.Thread
+  public static func runOnMainThread(_ task_: @escaping () -> ())
+  public static func startSyncTask(_ task_: @escaping () -> ())
+  public static func startAsyncTask(_ task_: @escaping () -> ())
+  public static func synchronized(_ lock_: Any, _ task_: () -> ())
+  @objc deinit
+}
+@objc final public class BleScanner : WiseTools.ServiceObject, CoreBluetooth.CBCentralManagerDelegate {
+  public init(_ delegate_: WiseTools.BleScannerDelegate, services_: [CoreBluetooth.CBUUID]?, queue_: Dispatch.DispatchQueue?)
+  final public func isAdapterEnabled() -> Swift.Bool
+  final public func startDiscovery()
+  final public func stopDiscovery()
+  @objc final public func centralManagerDidUpdateState(_ central: CoreBluetooth.CBCentralManager)
+  @objc final public func centralManager(_ central: CoreBluetooth.CBCentralManager, didDiscover peripheral: CoreBluetooth.CBPeripheral, advertisementData: [Swift.String : Any], rssi RSSI: Foundation.NSNumber)
+  override final public func release(_ creator_: Swift.AnyObject)
+  @objc deinit
+  @objc override dynamic public init()
+}
+public protocol BleScannerDelegate : AnyObject {
+  func onPeripheralDiscovered(_ peripheral_: CoreBluetooth.CBPeripheral, rssi_: Swift.Int, advert_: [Swift.String : Swift.AnyObject], timestamp_: Swift.UInt64)
+  func onBtStateChanged(_ state_: CoreBluetooth.CBCentralManagerState)
+}
+@_hasMissingDesignatedInitializers final public class TimerTool {
+  final public class TimeHandler {
+    public init(_ action_: @escaping () -> ())
+    final public func isCanceled() -> Swift.Bool
+    final public func cancel()
+    @objc deinit
+  }
+  public static func postponeAction(_ action_: @escaping () -> (), after delay_: Swift.Int)
+  public static func postponeAction(_ handler_: WiseTools.TimerTool.TimeHandler, after delay_: Swift.Int)
+  public static func postponeActionInBackground(_ action_: @escaping () -> (), after delay_: Swift.Int)
+  public static func postponeActionInBackground(_ handler_: WiseTools.TimerTool.TimeHandler, after delay_: Swift.Int)
+  @objc deinit
+}
+extension WiseTools.DatabaseTool.SQLiteStatusCode : Swift.Equatable {}
+extension WiseTools.DatabaseTool.SQLiteStatusCode : Swift.Hashable {}
+extension WiseTools.DatabaseTool.SQLiteStatusCode : Swift.RawRepresentable {}
+extension WiseTools.KeyDerivation.Algorithm : Swift.Equatable {}
+extension WiseTools.KeyDerivation.Algorithm : Swift.Hashable {}
+extension WiseTools.HMAC.Algorithm : Swift.Equatable {}
+extension WiseTools.HMAC.Algorithm : Swift.Hashable {}
+extension WiseTools.NetworkTool.ResultType : Swift.Equatable {}
+extension WiseTools.NetworkTool.ResultType : Swift.Hashable {}
+extension WiseTools.NetworkTool.ResultType : Swift.RawRepresentable {}
+extension WiseTools.NetworkTool.HttpStatusCode : Swift.Equatable {}
+extension WiseTools.NetworkTool.HttpStatusCode : Swift.Hashable {}
+extension WiseTools.NetworkTool.HttpStatusCode : Swift.RawRepresentable {}
+extension WiseTools.KeyChainHelper.AccessOption : Swift.Equatable {}
+extension WiseTools.KeyChainHelper.AccessOption : Swift.Hashable {}
+extension WiseTools.Auxiliary.Severity : Swift.Equatable {}
+extension WiseTools.Auxiliary.Severity : Swift.Hashable {}
+extension WiseTools.Auxiliary.Severity : Swift.RawRepresentable {}
+extension WiseTools.Cryptor.Algorithm : Swift.Equatable {}
+extension WiseTools.Cryptor.Algorithm : Swift.Hashable {}
+extension WiseTools.Cryptor.Algorithm : Swift.RawRepresentable {}
+extension WiseTools.Cryptor.Mode : Swift.Equatable {}
+extension WiseTools.Cryptor.Mode : Swift.Hashable {}
+extension WiseTools.Cryptor.Mode : Swift.RawRepresentable {}
+extension WiseTools.Cryptor.ModeOptions : Swift.Equatable {}
+extension WiseTools.Cryptor.ModeOptions : Swift.Hashable {}
+extension WiseTools.Cryptor.ModeOptions : Swift.RawRepresentable {}
+extension WiseTools.Cryptor.Padding : Swift.Equatable {}
+extension WiseTools.Cryptor.Padding : Swift.Hashable {}
+extension WiseTools.Cryptor.Padding : Swift.RawRepresentable {}
+extension WiseTools.Cryptor.Options : Swift.Equatable {}
+extension WiseTools.Cryptor.Options : Swift.Hashable {}
+extension WiseTools.Cryptor.Options : Swift.RawRepresentable {}
+extension WiseTools.SensorsTool.SensorType : Swift.Equatable {}
+extension WiseTools.SensorsTool.SensorType : Swift.Hashable {}
+@available(iOS 10.0, *)
+extension WiseTools.PermissionsManager.PermissionType : Swift.Equatable {}
+@available(iOS 10.0, *)
+extension WiseTools.PermissionsManager.PermissionType : Swift.Hashable {}
+@available(iOS 10.0, *)
+extension WiseTools.PermissionsManager.PermissionStatus : Swift.Equatable {}
+@available(iOS 10.0, *)
+extension WiseTools.PermissionsManager.PermissionStatus : Swift.Hashable {}
+extension WiseTools.AuthenticationTool.ErrorCode : Swift.Equatable {}
+extension WiseTools.AuthenticationTool.ErrorCode : Swift.Hashable {}
+extension WiseTools.AuthenticationTool.ErrorCode : Swift.RawRepresentable {}
+extension WiseTools.Digest.Algorithm : Swift.Equatable {}
+extension WiseTools.Digest.Algorithm : Swift.Hashable {}
